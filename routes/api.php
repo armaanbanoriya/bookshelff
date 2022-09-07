@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,13 +14,17 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('login', [AuthController::class, 'login']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('user', [AuthController::class, 'user']);
+    Route::post('logout', [AuthController::class, 'logout']);
+
+    Route::get('bycategory/{id}', [PostController::class, 'byCategory']);
+    Route::get('post/mostRecent', [PostController::class, 'mostRecent']);
+
+    Route::apiResource('category', CategoryController::class);
+    Route::apiResource('post', PostController::class);
 });
-Route::get('bycategory/{id}',[PostController::class,'byCategory']);
-Route::get('post/mostRecent',[PostController::class,'mostRecent']);
-
-Route::apiResource('category',CategoryController::class);
-Route::apiResource('post',PostController::class);
