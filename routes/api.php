@@ -18,13 +18,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 
+Route::get('bycategory/{id}', [PostController::class, 'byCategory']);
+Route::get('post/mostRecent', [PostController::class, 'mostRecent']);
+
+Route::apiResource('category', CategoryController::class);
+Route::apiResource('post', PostController::class);
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('user', [AuthController::class, 'user']);
     Route::post('logout', [AuthController::class, 'logout']);
 
-    Route::get('bycategory/{id}', [PostController::class, 'byCategory']);
-    Route::get('post/mostRecent', [PostController::class, 'mostRecent']);
-
-    Route::apiResource('category', CategoryController::class);
-    Route::apiResource('post', PostController::class);
 });
