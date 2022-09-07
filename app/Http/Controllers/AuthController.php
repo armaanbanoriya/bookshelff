@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
@@ -16,7 +17,7 @@ class AuthController extends Controller
             ],Response::HTTP_UNAUTHORIZED);
         }
 
-        $user =Auth::user();
+        $user = Auth::user();
 
         $jwt = $user->createToken('token')->plainTextToken;
 
@@ -34,7 +35,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-            $cookie = \Cookie::forget('jwt');
+            $cookie = Cookie::forget('jwt');
 
             return response([
                 'message' => 'success',
