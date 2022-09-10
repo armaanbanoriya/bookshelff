@@ -26,7 +26,7 @@ Route::apiResource('category', CategoryController::class);
 Route::apiResource('post', PostController::class);
 Route::apiResource('subscribe', SubscribeController::class);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::group(['middleware'=>['auth:sanctum']],function () {
     Route::get('user', [AuthController::class, 'user']);
     Route::post('logout', [AuthController::class, 'logout']);
 });
