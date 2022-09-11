@@ -87,6 +87,7 @@ class FrontController extends Controller
 
         //self code
         if(Auth::check())
+
         {
             $useremail= Auth::User()->email;
           $cart= Cart::where('useremail',$useremail)->get();
@@ -631,7 +632,7 @@ class FrontController extends Controller
     }
 
 	public function featuredproducts()
-	{
+    {
 		$featureproducts=Product::all();
 		return view('front.featureproducts',compact('featureproducts'));
 	}

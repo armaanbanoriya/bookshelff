@@ -72,7 +72,7 @@ class LoginController extends Controller
             $finduser = User::where('email', $user->getEmail())->first();
 
             if($finduser){
-            Session::put('armaanbanoriya',$finduser['email']);
+                Session::put('armaanbanoriya',$finduser['email']);
 
                 Auth::login($finduser,true);
 
@@ -88,7 +88,7 @@ class LoginController extends Controller
                     'password' => encrypt('FNDJK#R##*RU3483uHrereD#*URU(#*$')
                 ]);
 
-            Session::put('armaanbanoriya',$finduser['email']);
+                Session::put('armaanbanoriya',$finduser['email']);
 
                 Auth::login($newUser);
 
@@ -100,10 +100,6 @@ class LoginController extends Controller
         }
     }
 
-    public function __construct()
-    {
-        $this->middleware('guest')->except('logout');
-    }
 
 
 }
