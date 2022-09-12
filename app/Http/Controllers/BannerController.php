@@ -2,130 +2,116 @@
 
 namespace App\Http\Controllers;
 
-
-use Illuminate\Http\Request;
 use App\Banner;
+use Illuminate\Http\Request;
 
 class BannerController extends Controller
 {
     public function create(Request $a)
     {
-      
+
         return view('admin.banner.create');
     }
 
     public function save(Request $a)
     {
         $a->validate([
-            'title'=>'required','autofocus', 
-            'headingtitle'=>'required',
-            'boldheadingtitle'=>'required',
-            'url'=>'required',
-            'image'=>'mimes:jpeg,jpg,jfif|max:5000',
+            'title' => 'required', 'autofocus',
+            'headingtitle' => 'nullable',
+            'boldheadingtitle' => 'nullable',
+            'url' => 'nullable',
+            'image' => 'mimes:jpeg,jpg,jfif,gif|max:5000|required',
         ]);
+
+        $file = $a->file('image');
+        $filename = 'image' . time() . '.' . $a->image->extension();
+        $file->move("upload/", $filename);
         $data = new Banner;
-        $data->title=$a->title;
-        $data->headingtitle=$a->headingtitle;
-        $data->boldheadingtitle=$a->boldheadingtitle;
-        
-        $data->url=$a->url;
-         ///                    Image
-        $file=$a->file('image');     
-        // dd($file); 
-        // exit();
-      $filename = 'image'. time().'.'.$a->image->extension();
-        // dd($filename);
-        // exit(); 
-       $file->move("upload/",$filename); 
-       $data->image=$filename;
+        $data->title = $a->title;
+        $data->headingtitle = $a->headingtitle;
+        $data->boldheadingtitle = $a->boldheadingtitle;
+        $data->image = $filename;
+        $data->url = $a->url;
 
-      
+        $data->save();
 
-    //    print('<pre>');
-    //     print_r($a->all());
-        
-       $data->save();
-       
-       if($data)
-       {
-           return redirect('banner/display')->with('message','Save Successfully');
-       }
+        if ($data) {
+            return redirect('banner/display')->with('message', 'Save Successfully');
+        }
     }
 
     public function display()
     {
-        $data= Banner::all();
-        return view('admin.banner.display',compact('data'));
+        $data = Banner::all();
+        return view('admin.banner.display', compact('data'));
     }
 
     public function view($id)
     {
-       $data= Banner::find($id);
-       return view('admin.banner.view',compact('data'));
+        $data = Banner::find($id);
+        return view('admin.banner.view', compact('data'));
     }
 
     public function edit($id)
     {
-        $data= Banner::find($id);
-        return view('admin.banner.edit',compact('data'));
+        $data = Banner::find($id);
+        return view('admin.banner.edit', compact('data'));
     }
 
     public function update(Request $a)
     {
-        if($a->hasFile('image'))
-        { 
-     
-          $data = Banner::find($a->id);
-          
-          $data->title=$a->tile;
-          $data->headingtitle=$a->headingtitle;
-          $data->boldheadingtitle=$a->boldheadingtitle;
-          $data->url=$a->url;
-           ///                    Image
-          $file=$a->file('image');     
-          // dd($file);
-          // exit();
-        $filename = 'image'. time().'.'.$a->image->extension();
-          // dd($filename);
-          // exit(); 
-         $file->move("upload/",$filename); 
-         $data->image=$filename;   
-    
-      //    print('<pre>');
-      //     print_r($a->all());
-          
-         $data->save();
-            if($data)
-            {
-                return redirect('banner/display')->with('message','Data Updated');
+
+        $a->validate([
+            'title' => 'required', 'autofocus',
+            'headingtitle' => 'nullable',
+            'boldheadingtitle' => 'nullable',
+            'url' => 'nullable',
+            'image' => 'mimes:jpeg,jpg,jfif,gif|max:5000',
+        ]);
+
+        if ($a->hasFile('image')) {
+
+            $file = $a->file('image');
+            $filename = 'image' . time() . '.' . $a->image->extension();
+            $file->move("upload/", $filename);
+
+
+            $data = Banner::find($a->id);
+
+            $data->title = $a->title;
+            $data->headingtitle = $a->headingtitle;
+            $data->boldheadingtitle = $a->boldheadingtitle;
+            $data->url = $a->url;
+            $data->image = $filename;
+            $data->save();
+
+
+            if ($data) {
+                return redirect('banner/display')->with('message', 'Data Updated');
             }
-    
-            
-            }else{
-            $data= Banner::find($a->id);
-            $data->title=$a->title;
-            $data->headingtitle=$a->headingtitle;
-            $data->boldheadingtitle=$a->boldheadingtitle;
-            $data->url=$a->url;
+
+        } else {
+            $data = Banner::find($a->id);
+            $data->title = $a->title;
+            $data->headingtitle = $a->headingtitle;
+            $data->boldheadingtitle = $a->boldheadingtitle;
+            $data->url = $a->url;
             $data->save();
             if ($data) {
-                return redirect('banner/display')->with('message','Record Deleted');
+                return redirect('banner/display')->with('message', 'Record Deleted');
             }
-    
-    
+
         }
     }
 
     public function delete($id)
     {
-        $data= Banner::find($id);
-        $delete=$data->delete();
-        
-        if ($data) {
-            return redirect('banner/display')->with('message','Record Deleted');
-        }
+        $data = Banner::find($id);
+        $delete = $data->delete();
 
-        
+        if ($data) {
+            return redirect('banner/display')->with('message', 'Record Deleted');
+        }
 
     }
 }

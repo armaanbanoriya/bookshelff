@@ -13,8 +13,15 @@
     {{session('message')}}
 </p> @endif
 {{-- message end --}}
-    <div class="card-header">
-      <h3 class="card-title"> User <span>Orders</span> </h3>
+    <div class=" card-header ">
+        <div class="row justify-content-between">
+            <div class="col-md-12">
+                <h3 class="card-title"> User Orders </h3>
+                <div class="text-right">
+                <a href="{{ url('category/add') }}" class="btn btn-dark">Add Category</a>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -25,20 +32,20 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Image</th>
-              
+
                 <th>Action</th>
             </tr>
-            
+
         </thead>
-   
+
         <tbody>
             @foreach ($data as $a)
-            <tr> 
-                <td>{{ $a->id }}</td>                  
+            <tr>
+                <td>{{ $a->id }}</td>
                 <td>{{ $a->name }}</td>
                 <td>{{ $a->description }}</td>
                 <td><img src="{{ url('/upload/'.$a->image) }}" style="height: 150px; width: 150px; border-radius: 100%;"></td>
-                
+
                 <td>
                     <a class="btn btn-primary" href="{{ 'view/'.$a->id }}">View</a>
                     <a class="btn btn-success" href="{{ 'edit/'.$a->id }}">Edit</a>
@@ -46,7 +53,7 @@
                 </td>
 
 
-            </tr>                
+            </tr>
             @endforeach
         </tbody>
         <tfoot>
@@ -55,12 +62,12 @@
                 <th>Name</th>
                 <th>Description</th>
                 <th>Image</th>
-              
+
                 <th>Action</th>
             </tr>
         </tfoot>
-        
-       
+
+
     </table>
 </div>
 </div>

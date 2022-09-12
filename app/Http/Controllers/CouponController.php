@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Coupon;
+use App\Http\Requests\StoreCouponRequest;
 use Illuminate\Http\Request;
 
 class CouponController extends Controller
@@ -12,64 +13,53 @@ class CouponController extends Controller
         return view('admin.coupon.create');
     }
 
-    public function save(Request $a)
-    { 
-        $data= new Coupon;
-        $data->coupon_code=$a->coupon_code;
-        $data->amount=$a->amount;
-        $data->amount_type=$a->amount_type;
-        $data->expiry_date=$a->expiry_date;
+    public function save(StoreCouponRequest $a)
+    {
+        Coupon::create($a->validated());
 
-        $data->save();
+        return redirect('coupon/display')->with('message', 'Inserted Successfully');
 
-        if($data)
-        {
-            return redirect('coupon/display')->with('message','Inserted Successfully');
-        }
     }
 
     public function display()
     {
-        $data= Coupon::all();
-        return view('admin.coupon.display',compact('data'));
+        $data = Coupon::all();
+        return view('admin.coupon.display', compact('data'));
     }
     public function view($id)
     {
-        $data= Coupon::find($id);
-        return view('admin.coupon.view',compact('data'));
+        $data = Coupon::find($id);
+        return view('admin.coupon.view', compact('data'));
     }
     public function edit($id)
     {
-        $data= Coupon::find($id);
-        return view('admin.coupon.edit',compact('data'));
+        $data = Coupon::find($id);
+        return view('admin.coupon.edit', compact('data'));
     }
 
-    public function update(Request $a)
+    public function update(StoreCouponRequest $a)
     {
-        $data=Coupon::find($a->id);
-        $data->coupon_code=$a->coupon_code;
-        $data->amount=$a->amount;
-        $data->amount_type=$a->amount_type;
-        $data->expiry_date=$a->expiry_date;
+        $data = Coupon::find($a->id);
+        $data->coupon_code = $a->coupon_code;
+        $data->amount = $a->amount;
+        $data->amount_type = $a->amount_type;
+        $data->expiry_date = $a->expiry_date;
 
         $data->save();
 
-        if($data)
-        {
-            return redirect('coupon/display')->with('message','Fields Updated');
+        if ($data) {
+            return redirect('coupon/display')->with('message', 'Fields Updated');
         }
-        
+
     }
-    
 
     public function delete($id)
     {
-        $data=Coupon::find($id);
-        $delete= $data->delete();
+        $data = Coupon::find($id);
+        $delete = $data->delete();
 
-        if($data)
-        {
-            return redirect('coupon/display')->with('message','Record Deleted Successfully');
+        if ($data) {
+            return redirect('coupon/display')->with('message', 'Record Deleted Successfully');
         }
     }
 }

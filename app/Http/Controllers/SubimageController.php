@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreSubimageRequest;
 use App\Subimage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class SubimageController extends Controller
 {
@@ -14,7 +16,7 @@ class SubimageController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     /**
@@ -33,25 +35,23 @@ class SubimageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $a)
+    public function store(StoreSubimageRequest $a)
     {
-        $data= new Subimage;
-        $file=$a->file('image');     
-        // dd($file);
-        // exit();
-      $filename = 'image'. time().'.'.$a->image->extension();
-        // dd($filename);
-        // exit(); 
-       $file->move("upload/",$filename); 
-       $data->image=$filename;
 
+        if ($a->file('image') != null) {
+            $file = $a->file('image');
+            $filename = 'image' . time() . '.' . $a->image->extension();
+            $file->move("upload/", $filename);
+        }
 
-       $data->save();
+        $data = new Subimage;
+        $data->image = $filename ?? null;
 
-       if($data)
-       {
-           return redirect('subimages/display')->with('message','Save Successfully');
-       }
+        $data->save();
+
+        if ($data) {
+            return redirect('subimages/display')->with('message', 'Save Successfully');
+        }
     }
 
     /**
@@ -62,8 +62,8 @@ class SubimageController extends Controller
      */
     public function show()
     {
-       $data= Subimage::all();
-       return view('admin.Subimages.display',compact('data'));
+        $data = Subimage::all();
+        return view('admin.Subimages.display', compact('data'));
 
     }
 

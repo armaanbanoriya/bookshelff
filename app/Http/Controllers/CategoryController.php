@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Category;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
@@ -12,107 +14,84 @@ class CategoryController extends Controller
         return view('admin.category');
     }
 
-    public function save(Request $a)
-
+    public function save(StoreCategoryRequest $a)
     {
-        // print_r($a->all());
-        // die;
 
-
-        // echo "<pre>";
-        // print_r($a->file('image'));
-
-        $file=$a->file('image');
-        // dd($file);
-        // exit();
-       $filename = 'image'. time().'.'.$a->image->extension();
-    //     // dd($filename);
-    //     // exit();
-       $file->move("upload/",$filename);
-        //  dd($file);
-        //  exit;
+        $file = $a->file('image');
+        if ($file != null) {
+            $filename = 'image' . time() . '.' . $a->image->extension();
+            $file->move("upload/", $filename);
+        }
 
         $data = new Category;
-        $data->name=$a->name;
-        $data->description=$a->description;
-        $data->image=$filename;
+        $data->name = $a->name;
+        $data->description = $a->description;
+        $data->image = $filename ?? null;
 
         $data->save();
-        if($data)
-       {
-           return redirect('category/display')->with('message','Save Successfully');
-       }
+        if ($data) {
+            return redirect('category/display')->with('message', 'Save Successfully');
+        }
 
     }
 
     public function display()
     {
-        $data= Category::all();
-        return view('admin.display',compact('data'));
+        $data = Category::all();
+        return view('admin.display', compact('data'));
     }
 
     public function view($id)
     {
         $data = Category::find($id);
-        return view('admin.view',compact('data'));
+        return view('admin.view', compact('data'));
     }
 
     public function edit($id)
     {
-        $data= Category::find($id);
-        return view('admin.edit',compact('data'));
+        $data = Category::find($id);
+        return view('admin.edit', compact('data'));
     }
 
-    public function update(Request $a)
+    public function update(UpdateCategoryRequest $a)
     {
-        if($a->hasFile('image'))
-        {
-            $file =$a->file('image');
-            // print_r($a->all());
-        // die;
+        if ($a->hasFile('image')) {
+            $file = $a->file('image');
 
-            // dd($file);
-            // exit();
-           $filename = 'image'. time().'.'.$a->image->extension();
-        //     // dd($filename);
-        //     // exit();
-           $file->move("upload/",$filename);
-            //  dd($file);
-            //  exit;
+            $filename = 'image' . time() . '.' . $a->image->extension();
 
-            $data=  new Category();
-            $data= Category::find($a->id);
+            $file->move("upload/", $filename);
 
-            $data->name=$a->name;
-            $data->description=$a->description;
-            $data->image=$filename;
+            $data = new Category();
+            $data = Category::find($a->id);
+            $data->name = $a->name;
+            $data->description = $a->description;
+            $data->image = $filename;
 
             $data->save();
 
-            if($data)
-            {
-                return redirect('category/display')->with('message','Data Updated');
+            if ($data) {
+                return redirect('category/display')->with('message', 'Data Updated');
             }
 
-
-            }else{
-            $data=Category::find($a->id);
-            $data->name=$a->name;
-            $data->description=$a->description;
+        } else {
+            $data = Category::find($a->id);
+            $data->name = $a->name;
+            $data->description = $a->description;
             $data->save();
 
+        }
+
+        return redirect('category/display')->with('message', 'Data Updated');
     }
-}
     public function delete($id)
     {
-        $data=Category::find($id);
+        $data = Category::find($id);
 
-        $delete=$data->delete();
-        if($data)
-        {
-            return redirect('category/display')->with('message','deleted successfully');
+        $delete = $data->delete();
+        if ($data) {
+            return redirect('category/display')->with('message', 'deleted successfully');
         }
     }
-
 
 }
