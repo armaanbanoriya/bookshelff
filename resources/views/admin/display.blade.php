@@ -18,7 +18,7 @@
             <div class="col-md-12">
                 <h3 class="card-title"> User Orders </h3>
                 <div class="text-right">
-                <a href="{{ url('category/add') }}" class="btn btn-dark">Add Category</a>
+                <a href="{{ url('category/add') }}" class="btn btn-dark"> <ion-icon name="add-outline"></ion-icon> Add Category</a>
                 </div>
             </div>
         </div>

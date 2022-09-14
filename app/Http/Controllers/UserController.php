@@ -11,8 +11,7 @@ use Illuminate\Support\Str;
 
 use App\User;
 use App\Cart;
-
-
+use App\Http\Requests\LoginRequest;
 
 class UserController extends Controller
 {
@@ -131,7 +130,7 @@ class UserController extends Controller
     }
 
 
-    public function loginUser(Request $request)
+    public function loginUser(LoginRequest $request)
     {
 
         $session_id=Session::getId();
@@ -160,7 +159,7 @@ class UserController extends Controller
 
             $email=Auth::users()->email;
             $cart=Cart::where(['session_id'=>$session_id])->get();
-            DB::table('carts')->where('session_id',$session_id)->update('email',$email);
+            DB::table('carts')->where('session_id',$session_id)->update(['email',$email]);
             // print_r($session_id);
             // die;
 

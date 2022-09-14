@@ -76,8 +76,8 @@ class ProductController extends Controller
                 $data->category_id = $a->category_id;
                 $data->product_name = $a->product_name;
                 $data->product_code = $a->product_code;
-                $data->product_size = $a->product_description;
-
+                $data->product_size = $a->product_size;
+                $data->product_description = $a->product_description;
                 $data->product_image = $filename;
 
                 $data->product_price = $a->product_price;
@@ -94,7 +94,8 @@ class ProductController extends Controller
                 $data->category_id = $a->category_id;
                 $data->product_name = $a->product_name;
                 $data->product_code = $a->product_code;
-                $data->product_size = $a->product_description;
+                $data->product_size = $a->product_size;
+                $data->product_description = $a->product_description;
                 $data->product_price = $a->product_price;
                 $data->product_quantity = $a->product_quantity;
                 $data->save();

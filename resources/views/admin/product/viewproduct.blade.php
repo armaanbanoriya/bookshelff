@@ -32,16 +32,16 @@
                     </tr>
 
                 </thead>
-
                 <tbody>
-                    @foreach ($data as $b)
+
+                @foreach ($data as $b)
                         <tr>
                             <th scope="row">{{ $b->id }}</th>
                             <td>{{ $b->categories->name }}</td>
                             <td>{{ $b->product_name }}</td>
                             <td>{{ $b->product_code }}</td>
                             <td>{{ $b->product_size }}</td>
-                            <td>{{ $b->product_description }}</td>
+                            <td ><p class="text-truncate">{{ $b->product_description }}</p> </td>
                             <td><img src="{{ url('/upload/' . $b->product_image) }}"
                                     style="height: 150px; width: 150px; border-radius: 100%;"></td>
                             <td>{{ $b->product_price }}</td>
@@ -52,8 +52,10 @@
                                 <a class="btn btn-danger" href="{{ 'delete/' . $b->id }}">Delete</a>
                             </td>
                         </tr>
-                    @endforeach
-                </tbody>
+                @endforeach
+
+                    </tbody>
+
                 <tfoot>
                     <tr>
                         <th scope="col">Product ID</th>
@@ -72,5 +74,6 @@
 
             </table>
         </div>
+    </div>
 
-    @endsection
+@endsection
